@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
+  "version": "0.4.11",
+  "default_locale": "de",
+  "author": "wolxXx",
+  "homepage_url": "https://wolxxx.de/projects/tbaccsync",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "tbaccsync@wolxxx.de",
+      "strict_min_version": "128.0",
+      "strict_max_version": "153.*",
+      "update_url": "https://wolxxx.de/tbaccsync/updates.json"
+    }
+  },
+  "permissions": [
+    "accountsRead",
+    "accountsFolders",
+    "storage",
+    "downloads",
+    "alarms",
+    "notifications",
+    "tabs"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "type": "module"
+  },
+  "action": {
+    "default_title": "__MSG_extensionName__",
+    "default_popup": "ui/popup.html",
+    "default_icon": {
+      "32": "icons/icon-32.png"
+    }
+  },
+  "experiment_apis": {
+    "portableAccountConfig": {
+      "schema": "experiment/schema.json",
+      "parent": {
+        "scopes": [
+          "addon_parent"
+        ],
+        "paths": [
+          [
+            "portableAccountConfig"
+          ]
+        ],
+        "script": "experiment/implementation.js"
+      }
+    }
+  }
+}

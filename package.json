@@ -1,0 +1,53 @@
+{
+  "name": "thunderbird-portable-account-config",
+  "version": "0.4.11",
+  "description": "Thunderbird WebExtension add-on to export and import mail account configuration in a portable, platform-independent format.",
+  "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "wolxXx",
+    "email": "tbaccsync@wolxxx.de",
+    "url": "https://wolxxx.de/projects/tbaccsync"
+  },
+  "homepage": "https://wolxxx.de/projects/tbaccsync",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "tsc -p tsconfig.json --watch",
+    "clean": "rm -rf dist build web-ext-artifacts",
+    "test": "jest",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "package": "npm run build && web-ext build --source-dir=dist --artifacts-dir=web-ext-artifacts --overwrite-dest && for zip in web-ext-artifacts/*.zip; do cp \"$zip\" \"${zip%.zip}.xpi\"; done",
+    "run:tb": "npm run build && web-ext run -t thunderbird --source-dir=dist"
+  },
+  "devDependencies": {
+    "@types/jest": "latest",
+    "@types/node": "latest",
+    "ajv": "latest",
+    "jest": "latest",
+    "ts-jest": "latest",
+    "typescript": "latest",
+    "web-ext": "latest"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/test/**/*.test.ts"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "^.+\\.ts$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.test.json"
+        }
+      ]
+    }
+  }
+}

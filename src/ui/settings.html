@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Portable Account Configuration — Settings</title>
+    <link rel="stylesheet" href="popup.css" />
+    <style>
+      body { min-width: 0; max-width: 720px; margin: 0 auto; padding: 24px; }
+      .row { display: flex; gap: 8px; align-items: center; margin: 8px 0; }
+      .row label { flex: 0 0 200px; }
+      .row input[type="text"], .row input[type="number"] { flex: 1; }
+      .hint { color: #666; font-size: 0.9em; margin: 4px 0 12px 200px; }
+      .status { margin-top: 16px; padding: 8px; background: #f4f4f4; border-radius: 4px; white-space: pre-wrap; }
+      .onboarding { border: 2px solid #4a90e2; padding: 12px; border-radius: 6px; margin-bottom: 16px; background: #eaf3ff; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 data-i18n="settingsTitle">Settings</h1>
+    </header>
+
+    <div id="onboarding" class="onboarding" hidden>
+      <h2 data-i18n="onboardingTitle">Welcome</h2>
+      <p data-i18n="onboardingBody">
+        Set a file path (e.g. inside your Nextcloud folder). The add-on will
+        watch it and notify you when new accounts appear on another device.
+      </p>
+    </div>
+
+    <section>
+      <div class="row">
+        <label><input type="checkbox" id="enabled" /> <span data-i18n="watchEnabled">Enable file watch</span></label>
+      </div>
+
+      <div class="row">
+        <label for="path" data-i18n="watchPath">File path</label>
+        <input type="text" id="path" placeholder="/home/user/Nextcloud/thunderbird.tbaccount" />
+      </div>
+      <div class="hint" data-i18n="watchPathHint">
+        Absolute path to a portable account file inside a synced folder (Nextcloud, Dropbox, …).
+      </div>
+
+      <div class="row">
+        <label for="pollMinutes" data-i18n="watchInterval">Poll interval (minutes)</label>
+        <input type="number" id="pollMinutes" min="1" max="1440" value="15" />
+      </div>
+
+      <div class="row">
+        <label><input type="checkbox" id="autoImportNew" /> <span data-i18n="autoImportNew">Auto-import new accounts</span></label>
+      </div>
+      <div class="hint" data-i18n="autoImportNewHint">
+        Only conflict-free new accounts are imported silently. Conflicts always require your confirmation.
+      </div>
+
+      <div class="row">
+        <label><input type="checkbox" id="autoExport" /> <span data-i18n="autoExport">Auto-export on local change</span></label>
+      </div>
+      <div class="hint" data-i18n="autoExportHint">
+        Re-export the file after you change accounts locally. Optional — writes are not yet fully implemented.
+      </div>
+
+      <div class="actions">
+        <button id="btn-save" data-i18n="save">Save</button>
+        <button id="btn-check" data-i18n="checkNow">Check now</button>
+      </div>
+
+      <div id="status" class="status" hidden></div>
+    </section>
+
+    <script src="settings.js"></script>
+  </body>
+</html>

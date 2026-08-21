@@ -1,0 +1,120 @@
+[
+  {
+    "namespace": "portableAccountConfig",
+    "description": "Minimal WebExtension Experiment covering the parts of Thunderbird's account model that are not (yet) available in the official MV3 API of TB 128 ESR: SMTP server enumeration, reading of file-based signatures, and creation/update of accounts. Kept intentionally small so it can be replaced by official APIs as they become available.",
+    "functions": [
+      {
+        "name": "listSmtpServers",
+        "type": "function",
+        "description": "Return every outgoing (SMTP) server known to Thunderbird, in a portable-ready shape. Passwords and OAuth tokens are never returned.",
+        "async": true,
+        "parameters": [],
+        "returns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "hostname": { "type": "string" },
+              "port": { "type": "integer" },
+              "username": { "type": "string" },
+              "socketType": { "type": "string" },
+              "authMethod": { "type": ["string", "integer"] }
+            }
+          }
+        }
+      },
+      {
+        "name": "getIncomingServer",
+        "type": "function",
+        "description": "Return the incoming-server details (hostname, port, username, socketType, authMethod, ewsUrl) for the account with the given native key. Needed because the official messenger.accounts API in TB 128+ does not expose these fields directly.",
+        "async": true,
+        "parameters": [{ "name": "accountKey", "type": "string" }],
+        "returns": {
+          "type": ["object", "null"],
+          "properties": {
+            "hostname": { "type": "string" },
+            "port": { "type": "integer" },
+            "username": { "type": "string" },
+            "socketType": { "type": "string" },
+            "authMethod": { "type": ["string", "integer"] },
+            "ewsUrl": { "type": "string" },
+            "type": { "type": "string" }
+          }
+        }
+      },
+      {
+        "name": "readSignatureFile",
+        "type": "function",
+        "description": "If the given identity uses a file-based signature (sig_file), read the file from within the Thunderbird profile and return its content plus format. Returns null if no file signature is configured. The file path itself is never exported.",
+        "async": true,
+        "parameters": [{ "name": "identityId", "type": "string" }],
+        "returns": {
+          "type": ["object", "null"],
+          "properties": {
+            "content": { "type": "string" },
+            "format": { "enum": ["plain", "html"] }
+          }
+        }
+      },
+      {
+        "name": "readWatchedFile",
+        "type": "function",
+        "description": "Read a file from an absolute filesystem path (e.g. a synced Nextcloud folder). Returns null if the file does not exist. Throws on permission errors or if the file is larger than 4 MiB. Also returns mtime (ms since epoch) and a SHA-256 hex digest so callers can detect changes without re-parsing.",
+        "async": true,
+        "parameters": [{ "name": "path", "type": "string" }],
+        "returns": {
+          "type": ["object", "null"],
+          "properties": {
+            "text": { "type": "string" },
+            "mtime": { "type": "number" },
+            "sha256": { "type": "string" },
+            "size": { "type": "integer" }
+          }
+        }
+      },
+      {
+        "name": "writeWatchedFile",
+        "type": "function",
+        "description": "Atomically write a UTF-8 text file to an absolute filesystem path (write to <path>.tmp then rename). Used by the optional auto-export feature to mirror the current portable configuration into a synced folder. Throws on permission errors or if the path is a directory.",
+        "async": true,
+        "parameters": [
+          { "name": "path", "type": "string" },
+          { "name": "text", "type": "string" }
+        ],
+        "returns": {
+          "type": "object",
+          "properties": {
+            "bytesWritten": { "type": "integer" },
+            "sha256": { "type": "string" }
+          }
+        }
+      },
+      {
+        "name": "createAccount",
+        "type": "function",
+        "description": "Create a new account (and any missing SMTP servers) from a portable account specification. Refuses accounts with type 'unsupported'. Does NOT set passwords — Thunderbird will prompt at first use.",
+        "async": true,
+        "parameters": [{ "name": "spec", "type": "object", "additionalProperties": true }],
+        "returns": {
+          "type": "object",
+          "properties": { "nativeId": { "type": "string" } }
+        }
+      },
+      {
+        "name": "updateAccount",
+        "type": "function",
+        "description": "Update an existing account in place from a portable account specification. Passwords are never touched.",
+        "async": true,
+        "parameters": [
+          { "name": "nativeId", "type": "string" },
+          { "name": "spec", "type": "object", "additionalProperties": true }
+        ],
+        "returns": {
+          "type": "object",
+          "properties": { "nativeId": { "type": "string" } }
+        }
+      }
+    ]
+  }
+]

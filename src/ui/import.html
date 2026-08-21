@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Portable Account Configuration — Import</title>
+    <link rel="stylesheet" href="popup.css" />
+    <style>
+      body { min-width: 0; max-width: 900px; margin: 0 auto; padding: 24px; }
+      ul { max-height: none; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 data-i18n="importTitle">Import accounts</h1>
+    </header>
+
+    <section id="view-import">
+      <p>
+        <input type="file" id="file-input" accept=".tbaccount,.json,application/json" />
+      </p>
+      <div id="import-summary"></div>
+      <ul id="import-items"></ul>
+      <div class="actions">
+        <button id="btn-import-do" data-i18n="startImport" disabled>Start import</button>
+      </div>
+    </section>
+
+    <section id="view-result" hidden>
+      <h2 data-i18n="resultTitle">Import complete</h2>
+      <div id="result-body"></div>
+    </section>
+
+    <script src="import.js"></script>
+  </body>
+</html>

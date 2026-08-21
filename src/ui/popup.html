@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Portable Account Configuration</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1 data-i18n="extensionName">Portable Account Configuration</h1>
+    </header>
+
+    <section id="view-home">
+      <button id="btn-export" data-i18n="exportTitle">Export accounts</button>
+      <button id="btn-import" data-i18n="importTitle">Import accounts</button>
+      <button id="btn-settings" data-i18n="settingsTitle">Settings</button>
+    </section>
+
+    <section id="view-export" hidden>
+      <h2 data-i18n="exportTitle">Export accounts</h2>
+      <ul id="account-list"></ul>
+      <div class="actions">
+        <button id="btn-select-all" data-i18n="selectAll">Select all</button>
+        <button id="btn-select-none" data-i18n="selectNone">Select none</button>
+        <button id="btn-export-do" data-i18n="doExport">Export</button>
+        <button data-back data-i18n="back">Back</button>
+      </div>
+    </section>
+
+    <section id="view-import" hidden>
+      <h2 data-i18n="importTitle">Import accounts</h2>
+      <input type="file" id="file-input" accept=".tbaccount,.json,application/json" />
+      <div id="import-summary"></div>
+      <ul id="import-items"></ul>
+      <div class="actions">
+        <button id="btn-import-do" data-i18n="startImport" disabled>Start import</button>
+        <button data-back data-i18n="back">Back</button>
+      </div>
+    </section>
+
+    <section id="view-result" hidden>
+      <h2 data-i18n="resultTitle">Import complete</h2>
+      <div id="result-body"></div>
+      <button data-back data-i18n="back">Back</button>
+    </section>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/thunderbird-portable-account-config/v1.json",
+  "title": "Portable Thunderbird Account Configuration",
+  "type": "object",
+  "required": ["format", "version", "exportedAt", "accounts", "smtpServers"],
+  "additionalProperties": false,
+  "properties": {
+    "format": { "const": "thunderbird-portable-account-config" },
+    "version": { "const": 1 },
+    "exportedAt": { "type": "string", "minLength": 1 },
+    "accounts": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/account" }
+    },
+    "smtpServers": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/smtpServer" }
+    }
+  },
+  "definitions": {
+    "socketType": { "enum": ["plain", "starttls", "ssl"] },
+    "accountType": {
+      "enum": ["imap", "pop3", "ews", "nntp", "rss", "none", "unsupported"]
+    },
+    "signatureFormat": { "enum": ["plain", "html"] },
+    "incoming": {
+      "type": "object",
+      "required": ["hostname", "port", "username", "security", "authentication"],
+      "additionalProperties": false,
+      "properties": {
+        "hostname": { "type": "string", "minLength": 1 },
+        "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "username": { "type": "string" },
+        "security": { "$ref": "#/definitions/socketType" },
+        "authentication": { "type": "string", "minLength": 1 },
+        "ewsUrl": { "type": "string" }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "fullName", "email", "replyTo", "organization",
+        "signature", "signatureFormat", "default", "smtpServer"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "replyTo": { "type": "string" },
+        "organization": { "type": "string" },
+        "signature": { "type": "string" },
+        "signatureFormat": { "$ref": "#/definitions/signatureFormat" },
+        "default": { "type": "boolean" },
+        "smtpServer": { "type": ["string", "null"] }
+      }
+    },
+    "account": {
+      "type": "object",
+      "required": ["name", "type", "incoming", "identities"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "$ref": "#/definitions/accountType" },
+        "incoming": { "$ref": "#/definitions/incoming" },
+        "identities": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/identity" }
+        },
+        "unsupportedReason": { "type": "string" }
+      }
+    },
+    "smtpServer": {
+      "type": "object",
+      "required": ["id", "hostname", "port", "username", "security", "authentication"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "hostname": { "type": "string", "minLength": 1 },
+        "port": { "type": "integer", "minimum": 1, "maximum": 65535 },
+        "username": { "type": "string" },
+        "security": { "$ref": "#/definitions/socketType" },
+        "authentication": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
